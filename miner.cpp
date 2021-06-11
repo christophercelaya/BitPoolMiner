@@ -1,7 +1,6 @@
 #include <iostream>
 #include <sio_client.h>
 #include <sio_message.h>
-#include <pthread.h>
 #include <chrono>
 #include <thread>
 #include <stdlib.h>
@@ -57,7 +56,7 @@ void miner(uint8_t id, char * name, uint32_t blocks) {
     if (times_count < 10) times_count++;
     std::chrono::duration<double, std::micro> duration = times[times_index] - times[times_index + 1 == times_count ? 0 : times_index + 1];
     if (times_index == 9) times_index = 0; else times_index++;
-    double hashrate = (double)blocks * 1024.0 * (times_count - 1) / duration.count();
+    double hashrate = (double)blocks * 256.0 * (times_count - 1) / duration.count();
     time = std::time(nullptr);
     localtime = std::localtime(&time);
     if (times_count > 2 && times_index % 2 == 0) std::cout<<"["<<std::put_time(localtime, "%Y-%m-%d %H:%M:%S")<<"] [hashrate] GPU #"<<+id<<" "<<name<<" "<<hashrate<<" MH/s"<<std::endl;
@@ -97,7 +96,7 @@ int main(int argc, char *argv[]) {
     cudaGetDeviceProperties(&deviceProp, i);
     if (deviceProp.major >= 5) {
       std::cout<<"#"<<+i<<" "<<deviceProp.name<<" "<<deviceProp.major<<"."<<deviceProp.minor<<std::endl;
-      if (deviceProp.maxGridSize[0] < 2048 * 1024) blocks = deviceProp.maxGridSize[0]; else blocks = 2048 * 1024;
+      if (deviceProp.maxGridSize[0] < 8 * 1024 * 1024) blocks = deviceProp.maxGridSize[0]; else blocks = 8 * 1024 * 1024;
       cudaSetDevice(i);
       cudaDeviceReset();
       cudaSetDeviceFlags(cudaDeviceScheduleYield);

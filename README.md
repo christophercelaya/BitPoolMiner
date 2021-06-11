@@ -3,9 +3,9 @@
 
 ### Prerequisites
 
-1. [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads)
-2. [Socket.IO client](https://github.com/socketio/socket.io-client-cpp/blob/master/INSTALL.md#with-cmake)
+1. [CUDA Toolkit 11.2.2](https://developer.nvidia.com/cuda-11.2.2-download-archive)
 2. [CMake](https://cmake.org)
+3. [Socket.IO client](https://github.com/socketio/socket.io-client-cpp/blob/master/INSTALL.md#with-cmake)
 
 ### Installation
 

@@ -69,11 +69,11 @@ uint2 chi(const uint2 a,const uint2 b,const uint2 c) {
   return result;
 }
 
-static __global__ __launch_bounds__(1024)
+static __global__ __launch_bounds__(256)
 void clouthash_device(uint32_t *nonces) {
   uint2 data[25], t1, t2, bc0, bc1, bc2, bc3, bc4, bc01, bc11, bc21, bc31, bc41;
   memcpy(data, data_device, 200);
-  uint32_t nonce = 1024 * blockIdx.x + threadIdx.x;
+  uint32_t nonce = 256 * blockIdx.x + threadIdx.x;
   data[12].x = nonce;
   #pragma unroll
   for (int i = 0; i < 23; i++) {
@@ -165,7 +165,7 @@ void clouthash_update(uint64_t *data) {
 __host__
 void clouthash_run(uint8_t id, uint32_t blocks, uint32_t *nonces) {
   cudaMemset(nonces_device[id], 0xff, NONCES * sizeof(uint32_t));
-  dim3 block(1024);
+  dim3 block(256);
   dim3 grid(blocks);
   clouthash_device<<<grid, block>>>(nonces_device[id]);
   cudaMemcpy(nonces, nonces_device[id], NONCES * sizeof(uint32_t), cudaMemcpyDeviceToHost);
